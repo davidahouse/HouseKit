@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, tvOS 13.0, *)
 open class FixtureProvider {
 
     var error: ServiceError?

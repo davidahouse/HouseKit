@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
+@available(iOS 14.0, tvOS 14.0, *)
 public struct RemoteImage: View {
     private enum LoadState {
         case loading, success, failure
@@ -71,7 +71,7 @@ public struct RemoteImage: View {
 
 struct RemoteImage_Previews: PreviewProvider {
     static var previews: some View {
-        if #available(iOS 14.0, *) {
+        if #available(iOS 14.0, tvOS 14.0, *) {
             RemoteImage(url: "http://www.apple.com/favicon.ico")
         } else {
             // Fallback on earlier versions
