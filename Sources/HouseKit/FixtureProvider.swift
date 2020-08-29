@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 @available(iOS 13.0, *)
-public class FixtureProvider {
+open class FixtureProvider {
 
     var error: ServiceError?
 

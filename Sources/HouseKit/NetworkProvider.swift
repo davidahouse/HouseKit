@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 @available(iOS 13.0, *)
-public class NetworkProvider {
+open class NetworkProvider {
     let session: URLSession
     private var disposables = Set<AnyCancellable>()
 

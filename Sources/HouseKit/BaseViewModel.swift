@@ -19,7 +19,7 @@ public enum ViewModelState<T> {
 // MARK: - BaseViewModel
 
 @available(iOS 13.0, *)
-public class BaseViewModel<T>: ObservableObject {
+open class BaseViewModel<T>: ObservableObject {
 
     // MARK: - Public properties
 
