@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-struct RemoteImage: View {
+public struct RemoteImage: View {
     private enum LoadState {
         case loading, success, failure
     }
@@ -41,12 +41,12 @@ struct RemoteImage: View {
     var loading: Image
     var failure: Image
 
-    var body: some View {
+    public var body: some View {
         selectImage()
             .resizable()
     }
 
-    init(url: String, loading: Image = Image(systemName: "photo"), failure: Image = Image(systemName: "multiply.circle")) {
+    public init(url: String, loading: Image = Image(systemName: "photo"), failure: Image = Image(systemName: "multiply.circle")) {
         _loader = StateObject(wrappedValue: Loader(url: url))
         self.loading = loading
         self.failure = failure
