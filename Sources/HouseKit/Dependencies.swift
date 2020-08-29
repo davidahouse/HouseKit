@@ -12,7 +12,7 @@ import SwiftUI
 extension View {
  
     #if DEBUG
-    func previewDependencies() -> some View {
+    public func previewDependencies() -> some View {
         return self
     }
     #endif

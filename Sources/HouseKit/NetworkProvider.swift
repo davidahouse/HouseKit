@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 @available(iOS 13.0, *)
-class NetworkProvider {
+public class NetworkProvider {
     let session: URLSession
     private var disposables = Set<AnyCancellable>()
 
@@ -21,7 +21,7 @@ class NetworkProvider {
         }
     }
 
-    func request<T: Decodable>(url: URL) -> AnyPublisher<T, ServiceError> {
+    public func request<T: Decodable>(url: URL) -> AnyPublisher<T, ServiceError> {
         debugPrint(">>> \(url)")
 
         let publisher: AnyPublisher<T, ServiceError> =

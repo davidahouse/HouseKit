@@ -9,11 +9,11 @@ import Foundation
 import Combine
 
 @available(iOS 13.0, *)
-class FixtureProvider {
+public class FixtureProvider {
 
     var error: ServiceError?
 
-    func fetchPublisher<T>(_ value: T?) -> AnyPublisher<T, ServiceError> {
+    public func fetchPublisher<T>(_ value: T?) -> AnyPublisher<T, ServiceError> {
         if let value = value {
             return AnyPublisher<T, ServiceError>(Future<T, ServiceError> { promise in promise(.success(value))})
         } else if let error = error {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(iOS 13.0, *)
-struct DelayedAppearView<Content: View>: View {
+public struct DelayedAppearView<Content: View>: View {
 
     // MARK: - Private Properties
 
@@ -17,13 +17,13 @@ struct DelayedAppearView<Content: View>: View {
 
     // MARK: - Initializer
 
-    init(@ViewBuilder content: () -> Content) {
+    public init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
 
     // MARK: - Body
 
-    var body: some View {
+    public var body: some View {
         content
             .opacity(contentVisible ? 1 : 0)
             .animation(Animation.easeIn(duration: 1.0).delay(1.0))
