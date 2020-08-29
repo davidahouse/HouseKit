@@ -10,7 +10,7 @@ import Combine
 
 // MARK: - ViewModelState
 
-enum ViewModelState<T> {
+public enum ViewModelState<T> {
     case loading
     case networkError
     case results(T)
@@ -19,13 +19,13 @@ enum ViewModelState<T> {
 // MARK: - BaseViewModel
 
 @available(iOS 13.0, *)
-class BaseViewModel<T>: ObservableObject {
+public class BaseViewModel<T>: ObservableObject {
 
     // MARK: - Public properties
 
-    @Published var state: ViewModelState<T> = .loading
+    @Published public var state: ViewModelState<T> = .loading
 
-    var publisher: AnyPublisher<T, ServiceError>? = nil {
+    public var publisher: AnyPublisher<T, ServiceError>? = nil {
         didSet {
             self.fetch()
         }
@@ -33,7 +33,7 @@ class BaseViewModel<T>: ObservableObject {
 
     // MARK: - Initializer
 
-    init(state: ViewModelState<T> = .loading, publisher: AnyPublisher<T, ServiceError>? = nil) {
+    public init(state: ViewModelState<T> = .loading, publisher: AnyPublisher<T, ServiceError>? = nil) {
         self.state = state
         self.publisher = publisher
         fetch()
@@ -45,7 +45,7 @@ class BaseViewModel<T>: ObservableObject {
 
     // MARK: - Public methods
 
-    func fetch() {
+    public func fetch() {
         self.publisher?.sink(receiveCompletion: { result in
           if case let .failure(error) = result {
             print("Error receiving \(error)")
