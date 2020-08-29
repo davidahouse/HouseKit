@@ -13,6 +13,8 @@ open class FixtureProvider {
 
     var error: ServiceError?
 
+    public init() { }
+
     public func fetchPublisher<T>(_ value: T?) -> AnyPublisher<T, ServiceError> {
         if let value = value {
             return AnyPublisher<T, ServiceError>(Future<T, ServiceError> { promise in promise(.success(value))})
