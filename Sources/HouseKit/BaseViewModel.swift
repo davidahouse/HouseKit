@@ -12,7 +12,7 @@ import Combine
 
 public enum ViewModelState<T> {
     case loading
-    case networkError
+    case networkError(ServiceError)
     case results(T)
 }
 
@@ -50,7 +50,7 @@ open class BaseViewModel<T>: ObservableObject {
           if case let .failure(error) = result {
             print("Error receiving \(error)")
             DispatchQueue.main.async {
-                self.state = .networkError
+                self.state = .networkError(error)
             }
           }
         }, receiveValue: { value in
