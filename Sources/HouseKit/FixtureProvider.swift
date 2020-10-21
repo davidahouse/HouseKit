@@ -9,26 +9,30 @@ import Foundation
 import Combine
 
 @available(iOS 13.0, tvOS 13.0, *)
-open class FixtureProvider {
 
-    public var error: ServiceError?
-    public var loading: Bool = false
+public enum FixtureResponse<T> {
+    case loading
+    case error(ServiceError)
+    case results(T)
+}
+
+open class FixtureProvider {
 
     public init() { }
 
-    public func fetchPublisher<T>(_ value: T?) -> AnyPublisher<T, ServiceError> {
-        if loading {
-            return AnyPublisher<T, ServiceError>(Future<T, ServiceError> { _ in })
-        }
+    public func fetchPublisher<T>(_ value: FixtureResponse<T>?) -> AnyPublisher<T, ServiceError> {
 
-        if let error = error {
-            return AnyPublisher<T, ServiceError>(Future<T, ServiceError> { promise in promise(.failure(error))})
-        }
-
-        if let value = value {
-            return AnyPublisher<T, ServiceError>(Future<T, ServiceError> { promise in promise(.success(value))})
-        } else {
+        guard let value = value else {
             return AnyPublisher<T, ServiceError>(Future<T, ServiceError> { promise in promise(.failure(.network(description: "No fixture found")))})
+        }
+
+        switch value {
+        case .loading:
+            return AnyPublisher<T, ServiceError>(Future<T, ServiceError> { _ in })
+        case .error(let error):
+            return AnyPublisher<T, ServiceError>(Future<T, ServiceError> { promise in promise(.failure(error))})
+        case .results(let result):
+            return AnyPublisher<T, ServiceError>(Future<T, ServiceError> { promise in promise(.success(result))})
         }
     }
 }
