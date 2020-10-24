@@ -23,7 +23,11 @@ open class BaseViewModel<T>: ObservableObject {
 
     // MARK: - Public properties
 
-    @Published public var state: ViewModelState<T> = .loading
+    @Published public var state: ViewModelState<T> = .loading {
+        didSet {
+            self.didChangeState()
+        }
+    }
 
     public var publisher: AnyPublisher<T, ServiceError>? = nil {
         didSet {
@@ -44,6 +48,8 @@ open class BaseViewModel<T>: ObservableObject {
     private var disposables = Set<AnyCancellable>()
 
     // MARK: - Public methods
+    
+    public func didChangeState() { }
 
     public func fetch() {
         self.publisher?.sink(receiveCompletion: { result in
