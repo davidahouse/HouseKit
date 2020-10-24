@@ -49,7 +49,7 @@ open class BaseViewModel<T>: ObservableObject {
 
     // MARK: - Public methods
     
-    public func didChangeState() { }
+    open func didChangeState() { }
 
     public func fetch() {
         self.publisher?.sink(receiveCompletion: { result in
