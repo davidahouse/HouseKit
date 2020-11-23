@@ -26,40 +26,32 @@ open class NetworkProvider {
 
         let publisher: AnyPublisher<T, ServiceError> =
             session.dataTaskPublisher(for: URLRequest(url: url))
-              .mapError { error in
-                .network(description: error.localizedDescription)
-              }
-              .flatMap(maxPublishers: .max(1)) { pair in
-                decode(pair.data)
-              }
-                .receive(on: RunLoop.main)
-              .eraseToAnyPublisher()
+            .map(\.data)
+            .decode()
+            .mapError { error in
+                if let decodingError = error as? DecodingError {
+                    switch decodingError {
+                    case .dataCorrupted(let context):
+                        return .parsing(description: "Data corrupted error \(context.debugDescription)")
+                    case .typeMismatch(let typeMismatch, let context):
+                        return .parsing(description: "Type \(typeMismatch) mismatch: \(context.debugDescription) in path: \(context.codingPath)")
+                    default:
+                        return .parsing(description: "\(decodingError)")
+                    }
+                } else {
+                    return .parsing(description: error.localizedDescription)
+                }
+            }
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
         return publisher
     }
 }
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
-public func decode<T: Decodable>(_ data: Data) -> AnyPublisher<T, ServiceError> {
-  let decoder = JSONDecoder()
-  decoder.dateDecodingStrategy = .formatted(Constants.iso8601Full)
-  return Just(data)
-    .decode(type: T.self, decoder: decoder)
-    .mapError { error in
-        if let decodingError = error as? DecodingError {
-            let resultString = String(data: data, encoding: .utf8)
-            debugPrint(">>> \(resultString ?? "")")
+extension Publisher where Output == Data {
 
-            switch decodingError {
-            case .dataCorrupted(let context):
-                return .parsing(description: "Data corrupted error \(context.debugDescription)")
-            case .typeMismatch(let typeMismatch, let context):
-                return .parsing(description: "Type \(typeMismatch) mismatch: \(context.debugDescription) in path: \(context.codingPath)")
-            default:
-                return .parsing(description: "\(decodingError)")
-            }
-        } else {
-            return .parsing(description: error.localizedDescription)
-        }
+    func decode<T: Decodable>(as type: T.Type = T.self,
+                              using decoder: JSONDecoder = .init()) -> Publishers.Decode<Self, T, JSONDecoder> {
+        return decode(type: type, decoder: decoder)
     }
-    .eraseToAnyPublisher()
 }
