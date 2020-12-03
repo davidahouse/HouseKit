@@ -48,10 +48,18 @@ open class NetworkProvider {
     }
 }
 
+extension JSONDecoder {
+    static let dateParsingDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(Constants.iso8601Full)
+        return decoder
+    }()
+}
+
 extension Publisher where Output == Data {
 
     func decode<T: Decodable>(as type: T.Type = T.self,
-                              using decoder: JSONDecoder = .init()) -> Publishers.Decode<Self, T, JSONDecoder> {
+                              using decoder: JSONDecoder = .dateParsingDecoder) -> Publishers.Decode<Self, T, JSONDecoder> {
         return decode(type: type, decoder: decoder)
     }
 }
