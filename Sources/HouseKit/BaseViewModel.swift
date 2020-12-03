@@ -74,7 +74,7 @@ open class BaseViewModel<T>: ObservableObject {
         })
     }
 
-    func stopRefreshing() {
+    public func stopRefreshing() {
         refreshTimer?.invalidate()
     }
 }
