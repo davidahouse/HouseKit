@@ -47,6 +47,8 @@ open class BaseViewModel<T>: ObservableObject {
 
     private var disposables = Set<AnyCancellable>()
 
+    private var refreshTimer: Timer?
+
     // MARK: - Public methods
     
     open func didChangeState() { }
@@ -64,5 +66,15 @@ open class BaseViewModel<T>: ObservableObject {
                 self.state = .results(value)
             }
         }).store(in: &self.disposables)
+    }
+
+    public func startRefreshing(interval: Int = 30) {
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true, block: { [weak self] _ in
+            self?.fetch()
+        })
+    }
+
+    func stopRefreshing() {
+        refreshTimer?.invalidate()
     }
 }
